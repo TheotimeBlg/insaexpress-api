@@ -4,10 +4,11 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
 
-from api.models import Team, TeamAchievement, Achievement, Balise, Position
+from api.models import Team, TeamAchievement, Achievement, Balise, Position, File
 from api.serializers import PublicTeamSerializer, TeamSerializer, TeamAchievementSerializer, AchievementSerializer, \
-    UserSerializer
+    UserSerializer, FileSerializer
 
 
 class PublicTeamsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -27,9 +28,8 @@ class TeamAchievementsViewSet(viewsets.ModelViewSet):
     queryset = TeamAchievement.objects.all()
     serializer_class = TeamAchievementSerializer
     permission_classes = [AllowAny]
-
-    def perform_create(self, serializer):
-        serializer.save(created_by_id=self.request.user.id)
+#    def perform_create(self, serializer):
+ #       serializer.save(created_by_id=self.request.user.id)
 
 
 class AchievementsViewSet(viewsets.ModelViewSet):
@@ -39,6 +39,13 @@ class AchievementsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(created_by_id=self.request.user.id)
+
+
+class FileUploadView(viewsets.ModelViewSet):
+    queryset = File.objects.all()
+    serializer_class = FileSerializer
+    permission_classes = [AllowAny]
+
 
 
 @permission_classes([])

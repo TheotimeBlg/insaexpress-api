@@ -101,14 +101,23 @@ class Achievement(models.Model):
 class TeamAchievement(models.Model):
     team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='team_achievements')
     achievement = models.ForeignKey(Achievement, on_delete=models.PROTECT, related_name='team_achievements')
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    #created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(blank=True, auto_now_add=True)
-    picture = models.CharField(max_length=150, default="default", verbose_name=_('nom de la photo'))
+    photo = models.FileField(blank=False, null=True)
+    validation = models.BooleanField(default=False)
+
 
 
     def __str__(self):
         return "{} a réussi le succès \"{}\" ({} points)".format(self.team.name, self.achievement.name, self.achievement.points)
 
+class File(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='file')
+    achievement = models.ForeignKey(Achievement, on_delete=models.PROTECT, related_name='file')
+    file = models.FileField(blank=False, null=True)
+
+    def __str__(self):
+        return self.file.name
 
 @receiver(post_save, sender=Achievement)
 def update_score_on_achievement_edit(instance, **kwargs):

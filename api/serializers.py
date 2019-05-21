@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+
 from api.fields import PublicLongitudeField, PublicLatitudeField, PublicDistanceField
-from api.models import Team, Participant, Position, Achievement, TeamAchievement
+from api.models import Team, Participant, Position, Achievement, TeamAchievement, File
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,7 +31,7 @@ class TeamAchievementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamAchievement
-        fields = ('created_at', 'achievement', 'achievement_id', 'team_id', 'picture')
+        fields = ('created_at', 'achievement', 'achievement_id', 'team_id', 'photo', 'validation')
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
@@ -61,5 +62,12 @@ class TeamSerializer(serializers.ModelSerializer):
                   'score', 'disqualified', 'team_achievements',
                   'participants', 'picture', 'last_seen')
 
-
+class FileSerializer(serializers.ModelSerializer):
+    achievement = AchievementSerializer(read_only=True)
+    achievement_id = serializers.IntegerField(write_only=True)
+    team_id = serializers.IntegerField()
+    class Meta:
+        model = File
+        fields = ('achievement', 'achievement_id', 'team_id', 'file')
+        
 
