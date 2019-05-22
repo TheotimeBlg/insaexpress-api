@@ -63,11 +63,11 @@ class TeamSerializer(serializers.ModelSerializer):
                   'participants', 'picture', 'last_seen')
 
 class FileSerializer(serializers.ModelSerializer):
-    achievement = AchievementSerializer(read_only=True)
-    achievement_id = serializers.IntegerField(write_only=True)
-    team_id = serializers.IntegerField()
+   # achievement_id = serializers.IntegerField(write_only=True)
+  #  team_id = serializers.IntegerField()
+
     class Meta:
         model = File
-        fields = ('achievement', 'achievement_id', 'team_id', 'file')
+        fields ="__all__"
         
 

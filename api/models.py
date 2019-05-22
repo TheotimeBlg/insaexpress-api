@@ -9,8 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 from geopy.distance import vincenty
 
 
-
-
 class Team(models.Model):
     name = models.CharField(max_length=150, verbose_name=_('nom d\'équipe'))
     picture = models.FileField(default="https://vignette.wikia.nocookie.net/lucifer/images/9/97/No_Photo.png/revision/latest?cb=20171213001812&path-prefix=fr", verbose_name=_('logo'))
@@ -98,12 +96,19 @@ class Achievement(models.Model):
         return "{} ({} points)".format(self.name, self.points)
 
 
+class File(models.Model):
+    file = models.FileField(blank=False, null=True)
+
+    def __str__(self):
+        return self.file.name
+
+
 class TeamAchievement(models.Model):
     team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='team_achievements')
     achievement = models.ForeignKey(Achievement, on_delete=models.PROTECT, related_name='team_achievements')
     #created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     created_at = models.DateTimeField(blank=True, auto_now_add=True)
-    photo = models.FileField(blank=False, null=True)
+    photo = models.ForeignKey(File, on_delete=models.PROTECT, related_name='team_achievements', null=True)
     validation = models.BooleanField(default=False)
 
 
@@ -111,13 +116,7 @@ class TeamAchievement(models.Model):
     def __str__(self):
         return "{} a réussi le succès \"{}\" ({} points)".format(self.team.name, self.achievement.name, self.achievement.points)
 
-class File(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='file')
-    achievement = models.ForeignKey(Achievement, on_delete=models.PROTECT, related_name='file')
-    file = models.FileField(blank=False, null=True)
 
-    def __str__(self):
-        return self.file.name
 
 @receiver(post_save, sender=Achievement)
 def update_score_on_achievement_edit(instance, **kwargs):

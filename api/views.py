@@ -27,7 +27,19 @@ class TeamsViewSet(viewsets.ReadOnlyModelViewSet):
 class TeamAchievementsViewSet(viewsets.ModelViewSet):
     queryset = TeamAchievement.objects.all()
     serializer_class = TeamAchievementSerializer
+    parser_class = (FileUploadParser,)
     permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+
+      ta_serializer = TeamAchievementSerializer(data=request.data)
+
+      if ta_serializer.is_valid():
+          ta_serializer.save()
+          return Response(ta_serializer.data, status=status.HTTP_201_CREATED)
+      else:
+          return Response(ta_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 #    def perform_create(self, serializer):
  #       serializer.save(created_by_id=self.request.user.id)
 
@@ -44,7 +56,18 @@ class AchievementsViewSet(viewsets.ModelViewSet):
 class FileUploadView(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
+    parser_class = (FileUploadParser,)
     permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+
+      file_serializer = FileSerializer(data=request.data)
+
+      if file_serializer.is_valid():
+          file_serializer.save()
+          return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+      else:
+          return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
