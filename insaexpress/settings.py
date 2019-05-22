@@ -32,7 +32,7 @@ DEBUG = os.environ.get('ENV', 'development') != 'production'
 #ALLOWED_HOSTS = os.environ.get('HOST', 'localhost,insaexpress.bde-insa-lyon.fr,127.0.0.1').split(',')
 ALLOWED_HOST = ["*"];
 
-CORS_ORIGIN_WHITELIST = os.environ.get('CORS_HOSTS', 'http://localhost:4200,http://localhost:4201,http://www.insaexpress.racing').split(',')
+CORS_ORIGIN_WHITELIST = os.environ.get('CORS_HOSTS', 'localhost:4200, localhost:4201, www.insaexpress.racing').split(',')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_HOSTS', 'localhost:4200,localhost:4201').split(',')
 
 POSITION_API_KEY = os.environ.get('POSITION_API_KEY', 'HeyCoucou')

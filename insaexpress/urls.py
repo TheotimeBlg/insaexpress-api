@@ -22,7 +22,7 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token
 
 from api.views import PublicTeamsViewSet, TeamsViewSet, TeamAchievementsViewSet, AchievementsViewSet, LogoutViews, \
-    CurrentUserViews, PositionUpdateViews, FileUploadView
+    CurrentUserViews, PositionUpdateViews, FileUploadView, ValidateViewSet, NotValidateViewSet
 
 
 public_router = routers.DefaultRouter()
@@ -34,6 +34,8 @@ router = routers.DefaultRouter()
 router.register(r'teams', TeamsViewSet)
 router.register(r'achievements', AchievementsViewSet)
 router.register(r'team_achievements', TeamAchievementsViewSet)
+router.register(r'validate/false', NotValidateViewSet)
+router.register(r'validate/true', ValidateViewSet)
 router.register(r'upload', FileUploadView)
 
 urlpatterns = [
@@ -44,5 +46,6 @@ urlpatterns = [
     url(r'^manage/', include(router.urls)),
     url(r'^manage/me$', CurrentUserViews.as_view()),
     url(r'^update/$', PositionUpdateViews.as_view()),
+#   url(r'^manage/team_achievements/(?P<valid>.+)/$', ValidationViewSet.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

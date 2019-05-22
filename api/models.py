@@ -106,7 +106,7 @@ class File(models.Model):
 class TeamAchievement(models.Model):
     team = models.ForeignKey(Team, on_delete=models.PROTECT, related_name='team_achievements')
     achievement = models.ForeignKey(Achievement, on_delete=models.PROTECT, related_name='team_achievements')
-    #created_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     created_at = models.DateTimeField(blank=True, auto_now_add=True)
     photo = models.ForeignKey(File, on_delete=models.PROTECT, related_name='team_achievements', null=True)
     validation = models.BooleanField(default=False)

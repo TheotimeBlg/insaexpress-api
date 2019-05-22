@@ -5,6 +5,9 @@ from rest_framework import serializers
 from api.fields import PublicLongitudeField, PublicLatitudeField, PublicDistanceField
 from api.models import Team, Participant, Position, Achievement, TeamAchievement, File
 
+from django.http import QueryDict
+from url_filter.filtersets import ModelFilterSet
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,15 +26,33 @@ class AchievementSerializer(serializers.ModelSerializer):
         model = Achievement
         fields = ('id', 'name', 'points')
 
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = File
+        fields ="__all__"
+
 
 class TeamAchievementSerializer(serializers.ModelSerializer):
     achievement = AchievementSerializer(read_only=True)
     achievement_id = serializers.IntegerField(write_only=True)
     team_id = serializers.IntegerField()
+    photo = FileSerializer(read_only=True)
+    photo_id = serializers.IntegerField()
 
     class Meta:
         model = TeamAchievement
-        fields = ('created_at', 'achievement', 'achievement_id', 'team_id', 'photo', 'validation')
+        fields = ('id', 'created_at', 'achievement', 'achievement_id', 'team_id', 'photo', 'photo_id', 'validation')
+
+class ValidationSerializer(serializers.ModelSerializer):
+    achievement = AchievementSerializer(read_only=True)
+    achievement_id = serializers.IntegerField(write_only=True)
+    team_id = serializers.IntegerField()
+    photo = FileSerializer(read_only=True)
+    photo_id = serializers.IntegerField()
+    
+    class Meta:
+        model = TeamAchievement
+        fields= ('id', 'created_at', 'achievement', 'achievement_id', 'team_id', 'photo', 'photo_id', 'validation')
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
@@ -62,12 +83,6 @@ class TeamSerializer(serializers.ModelSerializer):
                   'score', 'disqualified', 'team_achievements',
                   'participants', 'picture', 'last_seen')
 
-class FileSerializer(serializers.ModelSerializer):
-   # achievement_id = serializers.IntegerField(write_only=True)
-  #  team_id = serializers.IntegerField()
 
-    class Meta:
-        model = File
-        fields ="__all__"
         
 

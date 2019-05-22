@@ -1,14 +1,15 @@
 from django.conf import settings
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
+from url_filter.integrations.drf import DjangoFilterBackend
 
 from api.models import Team, TeamAchievement, Achievement, Balise, Position, File
 from api.serializers import PublicTeamSerializer, TeamSerializer, TeamAchievementSerializer, AchievementSerializer, \
-    UserSerializer, FileSerializer
+    UserSerializer, FileSerializer, ValidationSerializer
 
 
 class PublicTeamsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -30,6 +31,9 @@ class TeamAchievementsViewSet(viewsets.ModelViewSet):
     parser_class = (FileUploadParser,)
     permission_classes = [AllowAny]
 
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['validation']
+
     def post(self, request, *args, **kwargs):
 
       ta_serializer = TeamAchievementSerializer(data=request.data)
@@ -40,8 +44,20 @@ class TeamAchievementsViewSet(viewsets.ModelViewSet):
       else:
           return Response(ta_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#    def perform_create(self, serializer):
- #       serializer.save(created_by_id=self.request.user.id)
+    def perform_create(self, serializer):
+        serializer.save(created_by_id=self.request.user.id)
+
+
+
+class NotValidateViewSet(viewsets.ModelViewSet):
+    queryset = TeamAchievement.objects.filter(validation=False)
+    serializer_class = ValidationSerializer
+    permission_classes= [AllowAny]
+
+class ValidateViewSet(viewsets.ModelViewSet):
+    queryset = TeamAchievement.objects.filter(validation=True)
+    serializer_class = ValidationSerializer
+    permission_classes= [AllowAny]
 
 
 class AchievementsViewSet(viewsets.ModelViewSet):
