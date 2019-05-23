@@ -7,6 +7,8 @@ from . import models
                 models.Balise,
                 models.Achievement,
                 models.Position,
-                models.TeamAchievement)
+                models.TeamAchievement,
+                models.File)
+		
 class BasicAdmin(admin.ModelAdmin):
     pass
