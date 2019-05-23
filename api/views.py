@@ -1,11 +1,10 @@
 from django.conf import settings
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny, DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
-from url_filter.integrations.drf import DjangoFilterBackend
 
 from api.models import Team, TeamAchievement, Achievement, Balise, Position, File
 from api.serializers import PublicTeamSerializer, TeamSerializer, TeamAchievementSerializer, AchievementSerializer, \
@@ -30,9 +29,6 @@ class TeamAchievementsViewSet(viewsets.ModelViewSet):
     serializer_class = TeamAchievementSerializer
     parser_class = (FileUploadParser,)
     permission_classes = [AllowAny]
-
-    filter_backends = [DjangoFilterBackend]
-    filter_fields = ['validation']
 
     def post(self, request, *args, **kwargs):
 
