@@ -5,8 +5,7 @@ from rest_framework import serializers
 from api.fields import PublicLongitudeField, PublicLatitudeField, PublicDistanceField
 from api.models import Team, Participant, Position, Achievement, TeamAchievement, File
 
-from django.http import QueryDict
-from url_filter.filtersets import ModelFilterSet
+
 
 
 class UserSerializer(serializers.ModelSerializer):
